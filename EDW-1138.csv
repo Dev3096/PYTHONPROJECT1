@@ -1,0 +1,38 @@
+Test,Result,Note,Query,Priority
+"EDW-1138 SPIKE/DEV: All Agility: New Agility field for PO closed date, QA, Timestamp = 06/18/2025 10:23:38",,,,Medium
+EDW-1138 MANUAL CHECK - Pull Request included in Jira ticket with not obvious mistakes,PASS,,Manual Check,High
+Pull Request =,,,,Medium
+https://dev.azure.com/abcdatasci/Enterprise%20Datasets/_git/Enterprise%20Datasets/pullrequest/16492,,,,Medium
+Manual CHECK - Unit test included in Jira ticket,PASS,,Manual Check,High
+https://adb-8948524198683894.14.azuredatabricks.net/editor/notebooks/864086632289507?o=8948524198683894#command/4946500807961370,,,,Medium
+EDW-1138 MANUAL CHECK - Table columns matches Documentation,PASS,,Manual Check,Low
+https://abcsupply.atlassian.net/wiki/spaces/EA/pages/2748514435/Source+To+Target+-+Dim+Purchase+Order+Document+-+L+W+Agility,,,,Medium
+EDW-1138 MANUAL CHECK - Acceptance criteria is well defined In Jira ticket,PASS,,Manual Check,High
+EDW-1138 MANUAL CHECK - Pipeline runs successfully in for Dim_Purchase_Order_Document_QA,PASS,,Manual Check,Critical
+EDW-1138 MANUAL CHECK - Metadata is correct,PASS,,Manual Check,Low
+"EDW-1138 Recent Data is loaded for Dim_Purchase_Order_Document Source System = ABCPROD, Company = ABC in QA datalake",PASS,"Min Date = 2020-10-05, Max Date = 2025-06-18, Total count = , Records = 32,180,396",,Medium
+"EDW-1138 Recent Data is loaded for Dim_Purchase_Order_Document Source System = AGILITY, Company = ABC in QA datalake",PASS,"Min Date = 2025-01-17, Max Date = 2025-06-18, Total count = , Records = 60,468",,Medium
+"EDW-1138 Recent Data is loaded for Dim_Purchase_Order_Document Source System = AGILITY, Company = CBCS in QA datalake",PASS,"Min Date = 2024-06-14, Max Date = 2025-06-18, Total count = , Records = 40,785",,Medium
+"EDW-1138 Recent Data is loaded for Dim_Purchase_Order_Document Source System = AGILITY, Company = LW in QA datalake",PASS,"Min Date = 2023-07-20, Max Date = 2025-06-18, Total count = , Records = 1,874,461",,Medium
+"EDW-1138 SNOWFLAKE - Recent Data is loaded for Dim_Purchase_Order_Document Source System = ABCPROD, Company = ABC in QA datalake",PASS,"Min Date = 2020-10-05, Max Date = 2025-06-18, Total count = , Records = 32,180,396",,Medium
+"EDW-1138 SNOWFLAKE - Recent Data is loaded for Dim_Purchase_Order_Document Source System = AGILITY, Company = ABC in QA datalake",PASS,"Min Date = 2025-01-17, Max Date = 2025-06-18, Total count = , Records = 60,468",,Medium
+"EDW-1138 SNOWFLAKE - Recent Data is loaded for Dim_Purchase_Order_Document Source System = AGILITY, Company = CBCS in QA datalake",PASS,"Min Date = 2024-06-14, Max Date = 2025-06-18, Total count = , Records = 40,785",,Medium
+"EDW-1138 SNOWFLAKE - Recent Data is loaded for Dim_Purchase_Order_Document Source System = AGILITY, Company = LW in QA datalake",PASS,"Min Date = 2023-07-20, Max Date = 2025-06-18, Total count = , Records = 1,874,461",,Medium
+EDW-1138 SNOWFLAKE - column types match Delta Table types in QA for Dim_Purchase_Order_Document,PASS,,,Medium
+EDW-1138 The correct column changes exist between QA and Prod for Dim_Purchase_Order_Document in the datalake,FAIL,"branch_number Types don't match QA: double, Prod: int",,
+,,Medium,,
+EDW-1138 SNOWFLAKE - The correct column changes exist between QA and Prod for Dim_Purchase_Order_Document,FAIL,"BRANCH_NUMBER Types don't match QA: double, Prod: decimal(38,0)",,
+,,Medium,,
+EDW-1138 - po_closed_canceled_date column is present in Dim_Purchase_Order_Document in QA,PASS,,,Medium
+EDW-1138 - Verify the merge of po_closed_canceled_date between source and target - LW - Dim_Purchase_Order_Document - QA,PASS,Count = 0,,Medium
+EDW-1138 - Verify the merge of po_closed_canceled_date between source and target - ABC - Dim_Purchase_Order_Document - QA,PASS,Count = 0,,Medium
+EDW-1138 - Verify the nulls between source and target - ABC - Dim_Purchase_Order_Document - QA,PASS,Count = 0,,Medium
+EDW-1138 - Verify the nulls between source and target - LW - Dim_Purchase_Order_Document - QA,PASS,Count = 0,,Medium
+EDW-1138 - Verify total count of po_closed_calceled_date between source and target - Agility ABC - Dim_Purchase_Order_Document - QA,PASS,Count = 43246,,Medium
+EDW-1138 - Verify total count of po_closed_calceled_date between source and target - Agility LW - Dim_Purchase_Order_Document - QA,PASS,Count = 109043,,Medium
+EDW-1138 - Verify po_closed_canceled_date between source and target are equal - Agility ABC - Dim_Purchase_Order_Document - QA,PASS,Count = 0,,Medium
+EDW-1138 - Verify po_closed_canceled_date between source and target are equal - Agility LW - Dim_Purchase_Order_Document - QA,PASS,Count = 0,,Medium
+EDW-1138 - Verify Nulls between source and target are equal - Agility LW - Dim_Purchase_Order_Document - QA,PASS,Count = 0,,Medium
+EDW-1138 - Verify Nulls between source and target are equal - Agility ABC - Dim_Purchase_Order_Document - QA,PASS,Count = 0,,Medium
+EDW-1138 - Verify po_closed_canceled_date is null for CBCS - Dim_Purchase_Order_Document - QA,PASS,Count = 0,,Medium
+EDW-1138 - Verify po_closed_canceled_date is null for POS - Dim_Purchase_Order_Document - QA,PASS,Count = 0,,Medium
