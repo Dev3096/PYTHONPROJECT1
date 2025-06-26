@@ -17,3 +17,5 @@ plt.xticks(rotation=0)
 plt.tight_layout()
 plt.show()
 
+plt.show()
+

@@ -4,11 +4,9 @@ import requests
 from azure.identity import DefaultAzureCredential
 from azure.keyvault.secrets import SecretClient
 
-import ssl
-
 # Your Azure Key Vault name
-KEY_VAULT_NAME = ""
-KV_URI = f""
+KEY_VAULT_NAME = "abcdataengineering"
+KV_URI = f"https://{KEY_VAULT_NAME}.vault.azure.net"
 
 # credential = DefaultAzureCredential()
 # client = SecretClient(vault_url=KV_URI, credential=credential)
@@ -54,7 +52,7 @@ def run_databricks_notebook():
     }
 
     payload = {
-    "job_id": "123",
+    "job_id": "1069551125400883",
     "notebook_params": {
             "azure_access_token": token
         }
