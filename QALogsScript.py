@@ -1,6 +1,7 @@
 import subprocess
 import json
 import requests
+import logging
 from azure.identity import DefaultAzureCredential
 from azure.keyvault.secrets import SecretClient
 
@@ -8,63 +9,84 @@ from azure.keyvault.secrets import SecretClient
 KEY_VAULT_NAME = "abcdataengineering"
 KV_URI = f"https://{KEY_VAULT_NAME}.vault.azure.net"
 
-# credential = DefaultAzureCredential()
-# client = SecretClient(vault_url=KV_URI, credential=credential)
+# Initialize Azure Key Vault client once
+_credential = DefaultAzureCredential()
+_secret_client = SecretClient(vault_url=KV_URI, credential=_credential)
 
-# Function to retrieve secrets dynamically
 def get_secret(secret_name):
     """Fetch secret value from Azure Key Vault."""
-    credential = DefaultAzureCredential()
-    client = SecretClient(vault_url=KV_URI, credential=credential)
+    try:
+        secret = _secret_client.get_secret(secret_name)
+        return secret.value
+    except Exception as e:
+        logging.error(f"Error fetching secret '{secret_name}': {e}")
+        raise
 
-    secret = client.get_secret(secret_name)
-    return secret.value
-
-# Function to set secrets dynamically (if needed)
 def set_secret(secret_name, secret_value):
-    """Fetch secret value from Azure Key Vault."""
-    credential = DefaultAzureCredential()
-    client = SecretClient(vault_url=KV_URI, credential=credential)
-    client.set_secret(secret_name, secret_value)
+    """Set secret value in Azure Key Vault."""
+    try:
+        _secret_client.set_secret(secret_name, secret_value)
+    except Exception as e:
+        logging.error(f"Error setting secret '{secret_name}': {e}")
+        raise
 
-# Function to get Azure CLI token
 def get_cli_token():
-    result = subprocess.run(
-        ["C:\\Program Files\\Microsoft SDKs\\Azure\\CLI2\\wbin\\az.cmd", "account", "get-access-token", "--resource", "https://management.azure.com"],
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
-        check = True,
-        text = True
-    )
-    token_data = json.loads(result.stdout)
-    return token_data["accessToken"]
+    """Get Azure CLI access token."""
+    try:
+        result = subprocess.run(
+            ["C:\\Program Files\\Microsoft SDKs\\Azure\\CLI2\\wbin\\az.cmd", "account", "get-access-token", "--resource", "https://management.azure.com"],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            check=True,
+            text=True
+        )
+        token_data = json.loads(result.stdout)
+        return token_data["accessToken"]
+    except subprocess.CalledProcessError as e:
+        logging.error(f"Error getting CLI token: {e.stderr}")
+        raise
+    except Exception as e:
+        logging.error(f"Unexpected error getting CLI token: {e}")
+        raise
 
-token = get_cli_token()
-# print(token)
-# Function to run a Databricks notebook using the Databricks REST API
-def run_databricks_notebook():
 
-    DATABRICKS_TOKEN = get_secret("Databricks-Token")
-    DATABRICKS_INSTANCE = get_secret("Databricks-Instance")
 
-    headers = {
-    "Authorization": f"Bearer {DATABRICKS_TOKEN}"
-    }
+def run_databricks_notebook(token):
+    """Run a Databricks notebook using the Databricks REST API."""
+    try:
+        DATABRICKS_TOKEN = get_secret("Databricks-Token")
+        DATABRICKS_INSTANCE = "https://adb-2641938447887677.17.azuredatabricks.net"
 
-    payload = {
-    "job_id": "1069551125400883",
-    "notebook_params": {
-            "azure_access_token": token
+        headers = {
+            "Authorization": f"Bearer {DATABRICKS_TOKEN}"
         }
-    }
 
-    response = requests.post(
-    f"{DATABRICKS_INSTANCE}/api/2.0/jobs/run-now",
-    headers=headers,
-    json=payload
-)
+        payload = {
+            "job_id": 1069551125400883,
+            "notebook_params": {
+                "azure_access_token": token
+            }
+        }
 
-    print(response.json())
+        response = requests.post(
+            f"{DATABRICKS_INSTANCE}/api/2.0/jobs/run-now",
+            headers=headers,
+            json=payload,
+            timeout=30
+        )
+        response.raise_for_status()
+        print(response.json())
+    except requests.RequestException as e:
+        logging.error(f"Databricks API request failed: {e}")
+        raise
+    except Exception as e:
+        logging.error(f"Unexpected error running Databricks notebook: {e}")
+        raise
 
-# Run the function to execute the Databricks notebook
-run_databricks_notebook()
+if __name__ == "__main__":
+    logging.basicConfig(level=logging.INFO)
+    try:
+        token = get_cli_token()
+        run_databricks_notebook(token)
+    except Exception as e:
+        logging.error(f"Script failed: {e}")
